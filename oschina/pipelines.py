@@ -10,7 +10,7 @@ import json
 
 class OschinaPipeline(object):
     def __init__(self):
-        self.filename = open("oschina.json", "wb")
+        self.filename = open("../oschina.json", "wb")
 
     def process_item(self, item, spider):
         text = json.dumps(dict(item), ensure_ascii=False) + ",\n"

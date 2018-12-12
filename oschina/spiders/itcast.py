@@ -17,17 +17,27 @@ class ItcastSpider(scrapy.Spider):
         for each in response.xpath('//div[@class="content"]'):
             item = OschinaItem()
 
-            item['title'] = each.xpath('./h3/a/text()').extract()
-            item['paperUrl'] = each.xpath('./h3/a/@href').extract()
-            item['desc'] = each.xpath('./div[@class="description"]/p/text()').extract()
-            item['author'] = each.xpath('./div[@class="extra"]/div/div[1]/a/text()').extract()
-            item['time'] = each.xpath('./div[@class="extra"]/div/div[2]/text()').extract()
+            item['title'] = zeroNodeInfo(each.xpath('./h3/a/text()').extract())
+            item['paperUrl'] = zeroNodeInfo(each.xpath('./h3/a/@href').extract())
+            item['desc'] = zeroNodeInfo(each.xpath('./div[@class="description"]/p/text()').extract())
+            item['author'] = zeroNodeInfo(each.xpath('./div[@class="extra"]/div/div[1]/a/text()').extract())
+            item['time'] = zeroNodeInfo(each.xpath('./div[@class="extra"]/div/div[2]/text()').extract())
             print(item)
             yield item
 
-        if self.offset > 5:
+        if self.offset > 1:
             self.offset += 1
 
         yield scrapy.Request(self.url.replace('^index^', str(self.offset)), callback=self.parse)
 
     pass
+
+
+def zeroNodeInfo(html):
+    length = len(html)
+    if length == 0:
+        return ''
+    elif length == 1:
+        return html[0]
+    else:
+        return html
