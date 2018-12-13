@@ -16,7 +16,6 @@ class ItcastSpider(scrapy.Spider):
     def parse(self, response):
         for each in response.xpath('//div[@class="content"]'):
             item = OschinaItem()
-
             item['title'] = zeroNodeInfo(each.xpath('./h3/a/text()').extract())
             item['paperUrl'] = zeroNodeInfo(each.xpath('./h3/a/@href').extract())
             item['desc'] = zeroNodeInfo(each.xpath('./div[@class="description"]/p/text()').extract())
@@ -25,7 +24,7 @@ class ItcastSpider(scrapy.Spider):
             print(item)
             yield item
 
-        if self.offset > 1:
+        if self.offset < 50:
             self.offset += 1
 
         yield scrapy.Request(self.url.replace('^index^', str(self.offset)), callback=self.parse)
